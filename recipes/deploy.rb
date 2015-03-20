@@ -40,3 +40,5 @@ execute 'copy-keychain-man-page' do
   EOF
   not_if "test -e #{node['keychain']['manpath']}/keychain.1.gz"
 end
+
+include_recipe 'minitest-handler'
