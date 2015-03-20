@@ -4,9 +4,12 @@ git_app_workspace = File.join( file_cache_path, 'keychain' )
 git git_app_workspace do
   repository node['keychain']['git']['repo']
   action :sync
+
   notifies :run, 'execute[git-keychain-cleanup]', :immediately
   notifies :run, 'execute[make-keychain]', :immediately
-  notifies :run, 'execute[install-keychain-script]', :immediately
+  notifies :run, 'execute[install-keychain]', :immediately
+
+  # notifies :run, 'execute[install-keychain-script]', :immediately
   notifies :run, 'execute[make-keychain-gz]'
   notifies :run, 'execute[copy-keychain-man-page]'
 end
@@ -21,10 +24,9 @@ execute 'make-keychain' do
   command 'make'
 end
 
-execute 'install-keychain-script' do
+execute 'install-keychain' do
   cwd git_app_workspace
-  command "cp keychain #{node['keychain']['install_root']}/keychain"
-  not_if "test -e #{node['keychain']['install_root']}/keychain"
+  command "install -m0755 keychain #{node['keychain']['install_root']}"
 end
 
 execute 'make-keychain-gz' do
