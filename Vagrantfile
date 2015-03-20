@@ -84,7 +84,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
     chef.json = {
     }
-
+    chef.log_level = :debug
     chef.run_list = [
       'recipe[keychain::default]'
     ]
